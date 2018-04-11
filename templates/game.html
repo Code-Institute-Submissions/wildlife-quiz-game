@@ -2,14 +2,33 @@
 
 <head>
     <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
     <h1>Welcome, {{ username }}</h1>
     {% block content %}
+    <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
     <p>Scientific Name: {{ animal.scientific_name }}</p>
-    <p>Type: {{ animal.type }}</p> 
+    <p>Type: {{ animal.type }}</p>
+    <p>Diet: {{ animal.diet }}</p>
+    <p>Average Life Span: {{ animal.average_life_span_in_the_wild }}</p>
+    <p>Group Name: {{ animal.group_name }}</p>
+    <p>Size: {{ animal.size }}</p>
+    <p>Weight: {{ animal.weight }}</p>
+    <p>Population Trend: {{ animal.population_trend }}</p>
     {% endblock %}
+
+    <form method="POST">
+        <label for="guess">Enter your guess here:</label>
+        <input type="text" id="guess" name="guess">
+        <button>Submit!</button>
+    </form>
+
+    <p>Previous incorrect guesses:</p>
+    {% for guess in guesses %}
+    <p>{{ guess }}</p>
+    {% endfor %}
     
 
     
