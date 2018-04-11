@@ -1,0 +1,18 @@
+<html>
+
+<head>
+    <title>{{ page_title }}</title>
+</head>
+
+<body>
+    <h1>Welcome, {{ username }}</h1>
+    {% block content %}
+    <p>Scientific Name: {{ animal.scientific_name }}</p>
+    <p>Type: {{ animal.type }}</p> 
+    {% endblock %}
+    
+
+    
+</body>
+
+</html>
