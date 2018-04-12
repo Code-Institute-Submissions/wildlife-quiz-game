@@ -2,6 +2,8 @@
 
 <head>
     <title>{{ page_title }}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="static/js/script.js"></script>
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 
@@ -24,6 +26,16 @@
         <input type="text" id="guess" name="guess">
         <button>Submit!</button>
     </form>
+
+    {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul class=flashes>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
 
     <p>Previous incorrect guesses:</p>
     {% for guess in guesses %}
