@@ -3,12 +3,22 @@
 <head>
     <title>{{ page_title }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="static/js/script.js"></script>
+    <!--<script src="static/js/script.js"></script>-->
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
-    <h1>Welcome, {{ username }}</h1>
+    {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul class=flashes>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
+
+    <h1>Welcome, {{ username }} your current score is {{ score }}</h1>
     {% block content %}
     <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
     <p>Scientific Name: {{ animal.scientific_name }}</p>
@@ -27,15 +37,7 @@
         <button>Submit!</button>
     </form>
 
-    {% with messages = get_flashed_messages() %}
-         {% if messages %}
-            <ul class=flashes>
-               {% for message in messages %}
-               <li>{{ message }}</li>
-               {% endfor %}
-            </ul>
-         {% endif %}
-      {% endwith %}
+    
 
     <p>Previous incorrect guesses:</p>
     {% for guess in guesses %}

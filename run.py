@@ -35,6 +35,52 @@ def get_all_guesses():
         guesses = animal_name_guesses.readlines()
     return guesses
 
+def update_scores_file(username):
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        try: 
+            data = json.load(jsonFile) # Read the JSON into the buffer
+            print(data)
+        except ValueError: 
+            data = [{"username": "","score": 0}]#set dummy data to avoid value error later on caused by empty json file
+        
+
+    ## Save our changes to JSON file
+    with open("data/scores.json", "w", encoding='utf-8') as jsonFile:
+        #json.dump([], jsonFile)
+        print(type(data))
+        for i in data:
+            print(type(i))
+            #if entry is found matching current username then update score by 1 for correct answer
+            if(i['username'] == username):
+                print (i['username'])
+                print(username)
+                print("score before")
+                print (i['score'])
+                i['score'] += 1
+                print("score after")
+                print (i['score'])
+
+        #if username does not exist then create entry in scores file
+        if not any(d['username'] == username for d in data):
+            score = 0
+            print(username,score)
+            entry = {'username': username, 'score': score}
+            data.append(entry)
+        
+        json.dump(data, jsonFile)
+
+def get_current_user_score(username):
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        data = json.load(jsonFile) # Read the JSON into the buffer
+        score = 0
+    ## if username already exists in scores file then get the score value
+    for i in data:
+            if(i['username'] == username):
+                score = i['score']
+            
+    return score
+
+
 
 @app.route('/', methods=["GET", "POST"])
 def index():
@@ -46,6 +92,8 @@ def index():
         clear_file("data/guesses.txt")
         global current_user_username
         current_user_username = request.form["username"]
+        update_scores_file(current_user_username)
+        print("updated scores file from index post")
         return redirect(url_for('game'))
     return render_template("index.html")
 
@@ -54,13 +102,13 @@ def game():
     username = current_user_username
             
     if request.method == "GET":
-        guesses = get_all_guesses()
         data = []
         with open("data/animals.json", "r") as json_data:
             data = json.load(json_data)
             global random_animal
             random_animal = random.choice(data)
-        return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses)
+            score = get_current_user_score(username)
+        return render_template("game.html", page_title="Game", animal=random_animal, username=username, score=score)
 
     elif request.method == "POST":
         guess = request.form['guess'].lower()
@@ -68,14 +116,15 @@ def game():
         if guess == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
             clear_file("data/guesses.txt")
+            update_scores_file(username)
+            print("updated scores file from game post")
             return redirect(url_for('game'))
     
         else:
             flash("Try again, that's an incorrect answer!")
             add_guesses(username, request.form["guess"] + "\n")
             guesses = get_all_guesses()
-            return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses)
-            
-        
+            score = get_current_user_score(username)
+            return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses, score=score)
 
 #app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
