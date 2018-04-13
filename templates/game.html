@@ -4,7 +4,7 @@
     <title>{{ page_title }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!--<script src="static/js/script.js"></script>-->
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/style.css" type="text/css">
 </head>
 
 <body>
@@ -21,7 +21,9 @@
     <h1>Welcome, {{ username }} your current score is {{ score }}</h1>
     <h3>Leaderboard</h3>
     {% for leaderboard_score in leaderboard_scores %}
-    <p>{{ leaderboard_score }}</p>
+        {% if loop.index <= 3 %}
+    <p>{{ leaderboard_score.username }} : {{ leaderboard_score.score }}</p>
+        {% endif %}
     {% endfor %}
 
     {% block content %}

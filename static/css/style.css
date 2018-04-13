@@ -1,3 +1,15 @@
 img {
     width: 100%;
 }
+
+.display {
+    width: 100%;
+    height: 100%;
+}
+
+.background-image {
+    background-image: url(https://media.nationalgeographic.org/assets/photos/231/064/add56c4d-d8ad-4a31-b81c-cfe56dade30f.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
