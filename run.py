@@ -80,6 +80,21 @@ def get_current_user_score(username):
             
     return score
 
+def username_already_exists(username):
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        try: 
+            data = json.load(jsonFile) # Read the JSON into the buffer
+            print(data)
+        except ValueError: 
+            data = [{"username": "","score": 0}]#set dummy data to avoid value error later on caused by empty json file
+        
+    ## check if username already exists in file
+    if any(d['username'] == username for d in data):
+        return True
+    else:
+        return False
+
+
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -88,10 +103,13 @@ def index():
     
     # Handle POST request
     if request.method == "POST":
-        write_to_file("data/users.txt", request.form["username"] + "\n")
+        #write_to_file("data/users.txt", request.form["username"] + "\n")
         clear_file("data/guesses.txt")
         global current_user_username
         current_user_username = request.form["username"]
+        if username_already_exists(current_user_username):
+            flash("username: {} already exists, please enter a different value for username :(".format(request.form["username"]))
+            return redirect(url_for('index')) 
         update_scores_file(current_user_username)
         print("updated scores file from index post")
         return redirect(url_for('game'))
