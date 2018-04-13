@@ -94,7 +94,16 @@ def username_already_exists(username):
     else:
         return False
 
+def get_leaderboard():
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        try: 
+            data = json.load(jsonFile) # Read the JSON into the buffer
+            print(data)
+        except ValueError: 
+            data = [{"username": "","score": 0}]#set dummy data to avoid v
 
+    leaderboard = sorted(data, key = lambda i: i['score'],reverse=True)
+    return leaderboard
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -126,7 +135,8 @@ def game():
             global random_animal
             random_animal = random.choice(data)
             score = get_current_user_score(username)
-        return render_template("game.html", page_title="Game", animal=random_animal, username=username, score=score)
+            leaderboard_scores = get_leaderboard()
+        return render_template("game.html", page_title="Game", animal=random_animal, username=username, score=score, leaderboard_scores=leaderboard_scores)
 
     elif request.method == "POST":
         guess = request.form['guess'].lower()
@@ -143,6 +153,7 @@ def game():
             add_guesses(username, request.form["guess"] + "\n")
             guesses = get_all_guesses()
             score = get_current_user_score(username)
-            return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses, score=score)
+            leaderboard_scores = get_leaderboard()
+            return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses, score=score, leaderboard_scores=leaderboard_scores)
 
 #app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)

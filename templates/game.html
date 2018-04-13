@@ -19,6 +19,11 @@
       {% endwith %}
 
     <h1>Welcome, {{ username }} your current score is {{ score }}</h1>
+    <h3>Leaderboard</h3>
+    {% for leaderboard_score in leaderboard_scores %}
+    <p>{{ leaderboard_score }}</p>
+    {% endfor %}
+
     {% block content %}
     <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
     <p>Scientific Name: {{ animal.scientific_name }}</p>
