@@ -1,0 +1,28 @@
+<html>
+
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="static/css/style.css" type="text/css">
+</head>
+
+<body>
+    
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+    <h1>Login</h1>
+    <h3>Please enter your username into the box and click the login button</h3>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <button>Login!</button>
+    </form>
+</body>
+
+</html>

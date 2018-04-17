@@ -7,22 +7,19 @@
 
 <body>
     
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
     <h1>Wildlife Guessing Game</h1>
     <h3>The aim of this game is to guess the name of the animal that is randomly presented</h3>
-    <form method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <button>Go to game!</button>
-    </form>
+    <div class=metanav>
+            {% if not session.logged_in %}
+              <a href="{{ url_for('login') }}">log in</a>
+            {% else %}
+              <a href="{{ url_for('logout') }}">log out</a>
+              <form method="POST">
+                    <button>Go to game!</button>
+                </form>
+            {% endif %}
+            </div>
+    
     <div class="background-image display"></div>
 </body>
 

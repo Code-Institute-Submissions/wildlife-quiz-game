@@ -2,12 +2,10 @@ import os
 import json
 import random
 from datetime import datetime
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
-
-current_user_username = "username"
 
 def write_to_file(filename, data):
     """Handle the process of writing data to a file"""
@@ -105,55 +103,74 @@ def get_leaderboard():
     leaderboard = sorted(data, key = lambda i: i['score'],reverse=True)
     return leaderboard
 
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+   if request.method == 'POST':
+      if username_already_exists(request.form['username']):
+          flash("username: {} already exists, please enter a different value for username :(".format(request.form["username"]))
+          return redirect(url_for('login')) 
+      session['username'] = request.form['username']
+      session['logged_in'] = True
+      return redirect(url_for('index'))
+   return render_template("login.html")
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   clear_file("data/guesses.txt")
+   session.pop('username', None)
+   session['logged_in'] = False
+   return redirect(url_for('index'))
+
 
 @app.route('/', methods=["GET", "POST"])
 def index():
     """Main page with instructions"""
+    if 'username' in session:
+      current_user_username = session['username']
+      # Handle POST request
+      if request.method == "POST":
+          clear_file("data/guesses.txt")
+          update_scores_file(current_user_username)
+          print("updated scores file from index post")
+          return redirect(url_for('game'))
     
-    # Handle POST request
-    if request.method == "POST":
-        #write_to_file("data/users.txt", request.form["username"] + "\n")
-        clear_file("data/guesses.txt")
-        global current_user_username
-        current_user_username = request.form["username"]
-        if username_already_exists(current_user_username):
-            flash("username: {} already exists, please enter a different value for username :(".format(request.form["username"]))
-            return redirect(url_for('index')) 
-        update_scores_file(current_user_username)
-        print("updated scores file from index post")
-        return redirect(url_for('game'))
     return render_template("index.html")
+
+    
 
 @app.route('/game', methods=["GET", "POST"])
 def game():
-    username = current_user_username
+    current_user_username = session['username']
             
     if request.method == "GET":
         data = []
         with open("data/animals.json", "r") as json_data:
             data = json.load(json_data)
-            global random_animal
             random_animal = random.choice(data)
-            score = get_current_user_score(username)
+            session['random_animal'] = random_animal
+            score = get_current_user_score(current_user_username)
             leaderboard_scores = get_leaderboard()
-        return render_template("game.html", page_title="Game", animal=random_animal, username=username, score=score, leaderboard_scores=leaderboard_scores)
+        return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, leaderboard_scores=leaderboard_scores)
 
     elif request.method == "POST":
         guess = request.form['guess'].lower()
+        random_animal = session['random_animal']
         answer = random_animal['title'].lower()
         if guess == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
             clear_file("data/guesses.txt")
-            update_scores_file(username)
+            update_scores_file(current_user_username)
             print("updated scores file from game post")
             return redirect(url_for('game'))
     
         else:
             flash("Try again, that's an incorrect answer!")
-            add_guesses(username, request.form["guess"] + "\n")
+            add_guesses(current_user_username, request.form["guess"] + "\n")
             guesses = get_all_guesses()
-            score = get_current_user_score(username)
+            score = get_current_user_score(current_user_username)
             leaderboard_scores = get_leaderboard()
-            return render_template("game.html", page_title="Game", animal=random_animal, username=username, guesses=guesses, score=score, leaderboard_scores=leaderboard_scores)
+            random_animal = session['random_animal']
+            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, guesses=guesses, score=score, leaderboard_scores=leaderboard_scores)
 
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
