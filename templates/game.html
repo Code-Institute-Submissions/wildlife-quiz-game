@@ -19,7 +19,6 @@
       {% endwith %}
 
     <h1>Welcome, you are logged in as {{ username }} your current score is {{ score }}</h1>
-    <p><b><a href = '/logout'>click here to log out</a></b></p>
     <h3>Leaderboard</h3>
     {% for leaderboard_score in leaderboard_scores %}
         {% if loop.index <= 3 %}
