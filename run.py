@@ -173,4 +173,4 @@ def game():
             random_animal = session['random_animal']
             return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, guesses=guesses, score=score, leaderboard_scores=leaderboard_scores)
 
-#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
