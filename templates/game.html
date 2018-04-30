@@ -2,12 +2,20 @@
 
 <head>
     <title>{{ page_title }}</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.0/cyborg/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!--<script src="static/js/script.js"></script>-->
     <link rel="stylesheet" href="static/css/style.css" type="text/css">
 </head>
 
 <body>
+    <div class="container">
     {% with messages = get_flashed_messages() %}
          {% if messages %}
             <ul class=flashes>
@@ -20,38 +28,81 @@
 
     <h1>Welcome, you are logged in as {{ username }} your current score is {{ score }}</h1>
     <h3>Leaderboard</h3>
-    {% for leaderboard_score in leaderboard_scores %}
-        {% if loop.index <= 3 %}
-    <p>{{ leaderboard_score.username }} : {{ leaderboard_score.score }}</p>
-        {% endif %}
-    {% endfor %}
+    
+    
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for leaderboard_score in leaderboard_scores %}
+            {% if loop.index <= 3 %}
+          <tr>
+            <td>{{ leaderboard_score.username }}</td>
+            <td>{{ leaderboard_score.score }}</td>
+        </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+      </table> 
+        
 
     {% block content %}
     <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
-    <p>Scientific Name: {{ animal.scientific_name }}</p>
-    <p>Type: {{ animal.type }}</p>
-    <p>Diet: {{ animal.diet }}</p>
-    <p>Average Life Span: {{ animal.average_life_span_in_the_wild }}</p>
-    <p>Group Name: {{ animal.group_name }}</p>
-    <p>Size: {{ animal.size }}</p>
-    <p>Weight: {{ animal.weight }}</p>
-    <p>Population Trend: {{ animal.population_trend }}</p>
+    <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th scope="row">Scientific Name:</th>
+                <td>{{ animal.scientific_name }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Type:</th>
+                    <td>{{ animal.type }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Diet:</th>
+                    <td>{{ animal.diet }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Average Life Span:</th>
+                    <td>{{ animal.average_life_span_in_the_wild }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Group Name:</th>
+                    <td>{{ animal.group_name }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Size:</th>
+                    <td>{{ animal.size }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Weight:</th>
+                    <td>{{ animal.weight }}</td>
+              </tr>
+              <tr>
+                    <th scope="row">Population Trend:</th>
+                    <td>{{ animal.population_trend }}</td>
+              </tr>
+            </tbody>
+          </table> 
+    
     {% endblock %}
 
-    <form method="POST">
-        <label for="guess">Enter your guess here:</label>
-        <input type="text" id="guess" name="guess">
-        <button>Submit!</button>
+    <form method="POST" class="form-group">
+        <label for="guess" class="col-form-label col-form-label-lg text-primary">What is this animal's correct official name?:</label>
+        <input class="form-control form-control-lg" type="text" id="guess" name="guess" placeholder="Enter guess here">
+        <button class="btn btn-primary btn-lg">Submit!</button>
     </form>
 
     
 
-    <p>Previous incorrect guesses:</p>
-    {% for guess in guesses %}
-    <p>{{ guess }}</p>
-    {% endfor %}
+    <p>Previous incorrect guess:</p>
+    <p>{{ previous_guess }}</p>
     
-
+</div>
     
 </body>
 

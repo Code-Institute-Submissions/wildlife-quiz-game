@@ -2,11 +2,19 @@
 
 <head>
     <title>Home</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.0/cyborg/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="static/css/style.css" type="text/css">
 </head>
 
 <body>
-    
+    <div class="container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul class=flashes>
@@ -19,10 +27,11 @@
     <h1>Login</h1>
     <h3>Please enter your username into the box and click the login button</h3>
     <form method="POST">
-        <label for="username">Username:</label>
+        <label for="username" class="text-info">Username:</label>
         <input type="text" id="username" name="username" required>
-        <button>Login!</button>
+        <button class="btn btn-default">Login!</button>
     </form>
+    </div>
 </body>
 
 </html>

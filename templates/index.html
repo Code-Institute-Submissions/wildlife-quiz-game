@@ -2,25 +2,36 @@
 
 <head>
     <title>Home</title>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.0/cyborg/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="static/css/style.css" type="text/css">
 </head>
 
 <body>
-    
-    <h1>Wildlife Guessing Game</h1>
-    <h3>The aim of this game is to guess the name of the animal that is randomly presented</h3>
-    <div class=metanav>
+    <div class="background-image display container">
+    <div class="jumbotron">
+        <h1 class="display-3">Wildlife Guessing Game</h1>
+        <p class="lead">The aim of this game is to guess the name of the animal that is randomly presented</p>
+        <hr class="my-4">
+        <div class=metanav>
             {% if not session.logged_in %}
               <a href="{{ url_for('login') }}">log in</a>
             {% else %}
               <a href="{{ url_for('logout') }}">log out</a>
+              <hr class="my-4">
               <form method="POST">
-                    <button>Go to game!</button>
+                    <button class="btn btn-info btn-lg">Go to game!</button>
                 </form>
             {% endif %}
-            </div>
-    
-    <div class="background-image display"></div>
+        </div>
+    </div>
+    </div>
 </body>
 
 </html>
