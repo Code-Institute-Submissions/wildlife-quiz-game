@@ -20,7 +20,11 @@
          {% if messages %}
             <ul class=flashes>
                {% for message in messages %}
-               <li>{{ message }}</li>
+               {% if success == 0 %}
+               <li class="text-danger">{{ message }}</li>
+               {% else %}
+               <li class="text-success">{{ message }}</li>
+               {% endif %}
                {% endfor %}
             </ul>
          {% endif %}

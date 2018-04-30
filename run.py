@@ -151,10 +151,11 @@ def game():
     
         else:
             flash("Try again, that's an incorrect answer!")
+            point_earned = 0
             previous_guess = session['guess']
             score = get_current_user_score(current_user_username)
             leaderboard_scores = get_leaderboard()
             random_animal = session['random_animal']
-            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guess=previous_guess, score=score, leaderboard_scores=leaderboard_scores)
+            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guess=previous_guess, score=score, leaderboard_scores=leaderboard_scores, success=point_earned)
 
 #app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
