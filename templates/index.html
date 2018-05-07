@@ -16,13 +16,24 @@
 <body>
     <div class="background-image display container">
     <div class="jumbotron">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                    <li class="text-success">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
         <h1 class="display-3">Wildlife Guessing Game</h1>
-        <p class="lead">The aim of this game is to guess the name of the animal that is randomly presented</p>
+        <h3>The aim of this game is to guess the name of the animal that is randomly presented</h3>
         <hr class="my-4">
         <div class=metanav>
             {% if not session.logged_in %}
-              <a href="{{ url_for('login') }}">log in</a>
+            <p>Returning existing User? <a href="{{ url_for('login') }}">log in</a></p>
+            <p>New User? <a href="{{ url_for('register') }}">register</a></p>
             {% else %}
+            <h5>Welcome, you are logged in as {{ username }}</h5>
               <a href="{{ url_for('logout') }}">log out</a>
               <hr class="my-4">
               <form method="POST">
