@@ -119,6 +119,28 @@ def get_current_user_score(username):
             
     return score
 
+def get_current_user_correctly_guessed(username):
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        data = json.load(jsonFile) # Read the JSON into the buffer
+        correctlyGuessed = []
+    ## if username already exists in scores file then get the history values
+    for i in data:
+            if(i['username'] == username):
+                correctlyGuessed = i['correctlyGuessed']
+            
+    return correctlyGuessed
+
+def get_current_user_passed(username):
+    with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+        data = json.load(jsonFile) # Read the JSON into the buffer
+        passed = []
+    ## if username already exists in scores file then get the history values
+    for i in data:
+            if(i['username'] == username):
+                passed = i['passed']
+            
+    return passed
+
 def username_already_exists(username):
     with open("data/scores.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
         try: 
@@ -183,11 +205,15 @@ def index():
     current_user_username = ""
     if 'username' in session:
       current_user_username = session['username']
+      correct_guesses = get_current_user_correctly_guessed(current_user_username)
+      print(correct_guesses)
+      passes = get_current_user_passed(current_user_username)
+      print(passes)
       # Handle POST request
       if request.method == "POST":
           return redirect(url_for('game'))
     
-    return render_template("index.html", username=current_user_username)
+    return render_template("index.html", username=current_user_username, correct_guesses=correct_guesses, passes=passes)
 
     
 

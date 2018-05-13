@@ -31,6 +31,7 @@
       {% endwith %}
 
     <h2>Welcome, you are logged in as {{ username }} your current score is {{ score }}</h2>
+    <br/><a href="{{ url_for('index') }}">home</a>
     <h3>Leaderboard</h3>
     
     
@@ -102,9 +103,9 @@
     </form>
 
     
-
-    <p>Previous incorrect guess:</p>
-    <p>{{ previous_guess }}</p>
+    {% if success == 0 %}
+    <p>Previous incorrect guess: {{ previous_guess }}</p>
+    {% endif %}
     
 </div>
     
