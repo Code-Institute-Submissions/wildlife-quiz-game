@@ -203,6 +203,8 @@ def logout():
 def index():
     """Main page with instructions"""
     current_user_username = ""
+    correct_guesses = []
+    passes = []
     if 'username' in session:
       current_user_username = session['username']
       correct_guesses = get_current_user_correctly_guessed(current_user_username)
