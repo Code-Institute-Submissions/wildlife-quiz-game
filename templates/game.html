@@ -1,21 +1,5 @@
-<html>
+{% extends 'base.html' %} {% block content %}
 
-<head>
-    <title>{{ page_title }}</title>
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.0/cyborg/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!--<script src="static/js/script.js"></script>-->
-    <link rel="stylesheet" href="static/css/style.css" type="text/css">
-</head>
-
-<body>
-    <div class="container">
     {% with messages = get_flashed_messages() %}
          {% if messages %}
             <ul class=flashes>
@@ -55,7 +39,6 @@
       </table> 
         
 
-    {% block content %}
     <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
     <table class="table table-hover">
             <tbody>
@@ -93,8 +76,6 @@
               </tr>
             </tbody>
           </table> 
-    
-    {% endblock %}
 
     <form method="POST" class="form-group">
         <label for="guess" class="col-form-label col-form-label-lg text-primary">What is this animal's correct official name?:</label>
@@ -106,9 +87,5 @@
     {% if success == 0 %}
     <p>Previous incorrect guess: {{ previous_guess }}</p>
     {% endif %}
-    
-</div>
-    
-</body>
-
-</html>
+     
+{% endblock %}

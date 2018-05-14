@@ -1,20 +1,4 @@
-<html>
-
-<head>
-    <title>Login</title>
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.0/cyborg/bootstrap.min.css">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="static/css/style.css" type="text/css">
-</head>
-
-<body>
-    <div class="container">
+{% extends 'base.html' %} {% block content %}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul class=flashes>
@@ -31,7 +15,4 @@
         <input type="text" id="username" name="username" required>
         <button class="btn btn-default">Login!</button>
     </form>
-    </div>
-</body>
-
-</html>
+{% endblock %}
