@@ -1,6 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-
-    <div class="background-image display container">
+<div class="container background-image display">
     <div class="jumbotron">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -78,5 +77,5 @@
             {% endif %}
         </div>
     </div>
-    </div>
+</div>
     {% endblock %}
