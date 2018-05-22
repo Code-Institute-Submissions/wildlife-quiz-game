@@ -35,6 +35,7 @@ def logout():
    # remove the username from the session if it is there
    session.pop('username', None)
    session['logged_in'] = False
+   flash("You were logged out")
    return redirect(url_for('index'))
 
 
