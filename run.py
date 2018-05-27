@@ -48,9 +48,9 @@ def index():
     if 'username' in session:
       current_user_username = session['username']
       helper_function.update_user_data_file(current_user_username)
-      correct_guesses = helper_function.get_current_user_correctly_guessed(current_user_username)
+      correct_guesses = helper_function.get_current_user_game_history(current_user_username, "correctlyGuessed")
       print(correct_guesses)
-      passes = helper_function.get_current_user_passed(current_user_username)
+      passes = helper_function.get_current_user_game_history(current_user_username, "passed")
       print(passes)
       # Handle POST request
       if request.method == "POST":
@@ -72,7 +72,7 @@ def game():
             print("random animal after:"+random_animal['title'])
         score = helper_function.get_current_user_score(current_user_username)
         leaderboard_scores = helper_function.get_leaderboard()
-        helper_function.add_animal_to_user_data_file(current_user_username)
+        helper_function.add_to_user_data_file(current_user_username,"animals")
         return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, leaderboard_scores=leaderboard_scores)
 
     elif request.method == "POST":
@@ -84,13 +84,13 @@ def game():
             flash("Well done, that's the correct answer! Here's another one :)")
             point_earned = 1
             helper_function.update_user_data_file(current_user_username, point_earned)
-            helper_function.add_correct_guess_to_user_data_file(current_user_username)
+            helper_function.add_to_user_data_file(current_user_username,"correctlyGuessed")
             print("updated scores file from game post")
             return redirect(url_for('game'))
         
         elif guess == "pass":
             flash("Previous animal was passed, new animal has been loaded")
-            helper_function.add_passed_to_user_data_file(current_user_username)
+            helper_function.add_to_user_data_file(current_user_username,"passed")
             return redirect(url_for('game'))
             
     
@@ -103,4 +103,4 @@ def game():
             random_animal = session['random_animal']
             return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guess=previous_guess, score=score, leaderboard_scores=leaderboard_scores, success=point_earned)
 
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)

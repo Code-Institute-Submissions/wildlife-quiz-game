@@ -11,51 +11,24 @@ def get_random_animal():
         session['random_animal'] = random_animal
     return random_animal
 
-"""function to add the title (name) of randomly chosen animal to user's animals list in user data file"""
-def add_animal_to_user_data_file(username):
+"""function to add the title (name) of randomly chosen animal to user's animals/correctlyGuessed/passed list in user data file"""
+def add_to_user_data_file(username,option):
     with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
         data = json.load(jsonFile) # Read the JSON into the buffer
     
     ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
         for i in data:
-            #if entry is found matching current username then add animals list
+            #if entry is found matching current username then add to animals or correctlyGuessed or passed list
             if(i['username'] == username):
                 random_animal = session['random_animal']
-                i['animals'].append(random_animal['title'])
-        
-        json.dump(data, jsonFile)
-
-"""function to add the title (name) of randomly chosen animal to user's correctlyGuessed list in user data file"""
-def add_correct_guess_to_user_data_file(username):
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
-        data = json.load(jsonFile) # Read the JSON into the buffer
-    
-    ## Save our changes to JSON file
-    with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
-        #json.dump([], jsonFile)
-        for i in data:
-            #if entry is found matching current username then add current random animal to correctlyGuessed list
-            if(i['username'] == username):
-                random_animal = session['random_animal']
-                i['correctlyGuessed'].append(random_animal['title'])
-        
-        json.dump(data, jsonFile)
-
-"""function to add the title (name) of randomly chosen animal to user's passed list in user data file"""
-def add_passed_to_user_data_file(username):
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
-        data = json.load(jsonFile) # Read the JSON into the buffer
-    
-    ## Save our changes to JSON file
-    with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
-        #json.dump([], jsonFile)
-        for i in data:
-            #if entry is found matching current username then add current random animal to passed list
-            if(i['username'] == username):
-                random_animal = session['random_animal']
-                i['passed'].append(random_animal['title'])
-        
+                if (option == "animals"):
+                    i['animals'].append(random_animal['title'])
+                elif (option == "correctlyGuessed"):
+                    i['correctlyGuessed'].append(random_animal['title'])
+                elif (option == "passed"):
+                    i['passed'].append(random_animal['title'])
+                
         json.dump(data, jsonFile)
 
 """function to check if the randomly chosen animal has already been asked for the logged in user"""
@@ -78,7 +51,7 @@ def update_user_data_file(username, score=0):
             data = json.load(jsonFile) # Read the JSON into the buffer
             print(data)
         except ValueError: 
-            data = [{"username": "","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
+            data = [{"username": "username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
             
     ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
@@ -109,29 +82,22 @@ def get_current_user_score(username):
             
     return score
 
-"""function to get the user's correctly guessed animals"""
-def get_current_user_correctly_guessed(username):
+"""function to get the user's game history (already asked animal list, correctly guessed list and passed list)"""
+def get_current_user_game_history(username, option):
     with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
         data = json.load(jsonFile) # Read the JSON into the buffer
-        correctlyGuessed = []
+        game_history = []
     ## if username already exists in scores file then get the history values
     for i in data:
             if(i['username'] == username):
-                correctlyGuessed = i['correctlyGuessed']
-            
-    return correctlyGuessed
+                if (option == "passed"):
+                    game_history = i['passed']
+                elif (option == "correctlyGuessed"):
+                    game_history = i['correctlyGuessed']
+                elif (option == "animals"):
+                    game_history = i['animals']
 
-"""function to get the user's passed animals"""
-def get_current_user_passed(username):
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
-        data = json.load(jsonFile) # Read the JSON into the buffer
-        passed = []
-    ## if username already exists in scores file then get the history values
-    for i in data:
-            if(i['username'] == username):
-                passed = i['passed']
-            
-    return passed
+    return game_history
 
 """function to check if the username entered already exists in the user data file"""
 def username_already_exists(username):
