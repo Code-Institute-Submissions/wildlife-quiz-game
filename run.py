@@ -75,6 +75,7 @@ def game():
         leaderboard_scores = helper_function.get_leaderboard()
         helper_function.add_to_user_data_file(current_user_username,"animals")
         session['previous_guesses'] = []
+        session['incorrect_guesses'] = 0
         return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, leaderboard_scores=leaderboard_scores)
 
     elif request.method == "POST":
@@ -99,6 +100,11 @@ def game():
             
     
         else:
+            session['incorrect_guesses'] += 1
+            print(session['incorrect_guesses'])
+            if session['incorrect_guesses'] == 3:
+                flash("Max number of guesses reached, new animal has been loaded")
+                return redirect(url_for('game'))
             flash("Try again, that's an incorrect answer!")
             point_earned = 0
             previous_guesses = session['previous_guesses']
