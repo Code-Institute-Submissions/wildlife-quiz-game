@@ -15,30 +15,8 @@
       {% endwith %}
 
     <h2>Welcome, you are logged in as {{ username }} your current score is {{ score }}</h2>
+    <h3>Round {{ game_round }} of 12</h3>
     <br/><a href="{{ url_for('index') }}">home</a>
-    <h3>Leaderboard</h3>
-    
-    
-    <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">User</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for leaderboard_score in leaderboard_scores %}
-            {% if loop.index <= 3 %}
-          <tr>
-            <td>{{ leaderboard_score.username }}</td>
-            <td>{{ leaderboard_score.score }}</td>
-        </tr>
-            {% endif %}
-        {% endfor %}
-        </tbody>
-      </table> 
-        
-
     <img src="{{ animal.thumbnail.url }}" alt="Picture of Animal">
     <table class="table table-hover">
             <tbody>
