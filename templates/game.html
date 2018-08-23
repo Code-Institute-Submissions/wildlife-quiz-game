@@ -85,7 +85,11 @@
 
     
     {% if success == 0 %}
-    <p>Previous incorrect guess: {{ previous_guess }}</p>
+    <p>Previous incorrect guesses: </p>
+    {% for previous_guess in previous_guesses %}
+       <p>{{ previous_guess }}</p>
+        {% endfor %}
+
     {% endif %}
 </div>    
 {% endblock %}

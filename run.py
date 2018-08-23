@@ -63,6 +63,7 @@ def index():
 @app.route('/game', methods=["GET", "POST"])
 def game():
     current_user_username = session['username']
+
             
     if request.method == "GET":
         random_animal = helper_function.get_random_animal()
@@ -73,12 +74,15 @@ def game():
         score = helper_function.get_current_user_score(current_user_username)
         leaderboard_scores = helper_function.get_leaderboard()
         helper_function.add_to_user_data_file(current_user_username,"animals")
+        session['previous_guesses'] = []
         return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, leaderboard_scores=leaderboard_scores)
 
     elif request.method == "POST":
         guess = request.form['guess'].lower()
         random_animal = session['random_animal']
-        session['guess'] = guess
+
+        session['previous_guesses'].append(guess)
+
         answer = random_animal['title'].lower()
         if guess == answer or guess+'s' == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
@@ -97,10 +101,10 @@ def game():
         else:
             flash("Try again, that's an incorrect answer!")
             point_earned = 0
-            previous_guess = session['guess']
+            previous_guesses = session['previous_guesses']
             score = helper_function.get_current_user_score(current_user_username)
             leaderboard_scores = helper_function.get_leaderboard()
             random_animal = session['random_animal']
-            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guess=previous_guess, score=score, leaderboard_scores=leaderboard_scores, success=point_earned)
+            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guesses=previous_guesses, score=score, leaderboard_scores=leaderboard_scores, success=point_earned)
 
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
