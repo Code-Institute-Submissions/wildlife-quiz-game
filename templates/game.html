@@ -79,8 +79,12 @@
 
     <form method="POST" class="form-group">
         <label for="guess" class="col-form-label col-form-label-lg text-primary">What is this animal's correct official name?:</label>
-        <input class="form-control form-control-lg" type="text" id="guess" name="guess" placeholder="Enter 'pass' to skip to next animal">
+        <input class="form-control form-control-lg" type="text" id="guess" name="guess" placeholder="Enter guess here">
         <button class="btn btn-primary btn-lg">Submit!</button>
+    </form>
+     <form method="POST" class="form-group">
+        <label for="guess" class="col-form-label col-form-label-lg text-primary">No idea? Click the Pass button to give up and load a new animal: </label>
+        <button type="submit" id="guess" name="guess" value="pass" class="btn btn-secondary">Pass</button>
     </form>
 
     
