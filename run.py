@@ -13,6 +13,7 @@ def register():
           return redirect(url_for('register')) 
       session['username'] = request.form['username']
       session['logged_in'] = True
+      session['game_round'] = 0
       flash("Successfully registered as new user and logged in! :)")
       helper_function.update_user_data_file(session['username'])
       return redirect(url_for('index'))
@@ -26,6 +27,7 @@ def login():
           return redirect(url_for('login')) 
       session['username'] = request.form['username']
       session['logged_in'] = True
+      session['game_round'] = 0
       flash("Successfully logged in as existing user! :)")
       return redirect(url_for('index'))
    return render_template("login.html")
@@ -55,7 +57,7 @@ def index():
       # Handle POST request
       if request.method == "POST":
           return redirect(url_for('game'))
-    
+
     return render_template("index.html", username=current_user_username, correct_guesses=correct_guesses, passes=passes)
 
     
@@ -63,6 +65,7 @@ def index():
 @app.route('/game', methods=["GET", "POST"])
 def game():
     current_user_username = session['username']
+
             
     if request.method == "GET":
         random_animal = helper_function.get_random_animal()
@@ -71,14 +74,22 @@ def game():
             random_animal = helper_function.get_random_animal()
             print("random animal after:"+random_animal['title'])
         score = helper_function.get_current_user_score(current_user_username)
-        leaderboard_scores = helper_function.get_leaderboard()
         helper_function.add_to_user_data_file(current_user_username,"animals")
-        return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, leaderboard_scores=leaderboard_scores)
+        session['previous_guesses'] = []
+        session['incorrect_guesses'] = 0
+
+        session['game_round'] += 1
+        game_round = session['game_round']
+        if game_round == 13:
+            return redirect(url_for('leaderboard'))
+        return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, score=score, game_round=game_round)
 
     elif request.method == "POST":
         guess = request.form['guess'].lower()
         random_animal = session['random_animal']
-        session['guess'] = guess
+
+        session['previous_guesses'].append(guess)
+
         answer = random_animal['title'].lower()
         if guess == answer or guess+'s' == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
@@ -95,12 +106,28 @@ def game():
             
     
         else:
+            session['incorrect_guesses'] += 1
+            print(session['incorrect_guesses'])
+            if session['incorrect_guesses'] == 3:
+                flash("Max number of guesses reached, new animal has been loaded")
+                return redirect(url_for('game'))
             flash("Try again, that's an incorrect answer!")
             point_earned = 0
-            previous_guess = session['guess']
+            previous_guesses = session['previous_guesses']
             score = helper_function.get_current_user_score(current_user_username)
-            leaderboard_scores = helper_function.get_leaderboard()
             random_animal = session['random_animal']
-            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guess=previous_guess, score=score, leaderboard_scores=leaderboard_scores, success=point_earned)
+            return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guesses=previous_guesses, score=score, success=point_earned, game_round=game_round)
+
+
+@app.route('/leaderboard', methods=["GET", "POST"])
+def leaderboard():
+    """Main page with instructions"""
+    leaderboard_scores = helper_function.get_leaderboard()
+    session['game_round'] = 0
+        # Handle POST request
+    if request.method == "POST":
+        return redirect(url_for('game'))
+
+    return render_template("leaderboard.html", leaderboard_scores=leaderboard_scores)
 
 app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)

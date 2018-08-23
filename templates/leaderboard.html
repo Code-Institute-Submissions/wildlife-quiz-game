@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container  background-image display">
+    <h1>Game Over</h1>
+    <br/><a href="{{ url_for('game') }}">Start a new Game</a>
+    <h3>Leaderboard</h3>
+
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">User</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for leaderboard_score in leaderboard_scores %}
+            {% if loop.index <= 3 %}
+          <tr>
+            <td>{{ leaderboard_score.username }}</td>
+            <td>{{ leaderboard_score.score }}</td>
+        </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}
