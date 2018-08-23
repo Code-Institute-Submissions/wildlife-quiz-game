@@ -116,6 +116,7 @@ def game():
             previous_guesses = session['previous_guesses']
             score = helper_function.get_current_user_score(current_user_username)
             random_animal = session['random_animal']
+            game_round = session['game_round']
             return render_template("game.html", page_title="Game", animal=random_animal, username=current_user_username, previous_guesses=previous_guesses, score=score, success=point_earned, game_round=game_round)
 
 
@@ -130,4 +131,4 @@ def leaderboard():
 
     return render_template("leaderboard.html", leaderboard_scores=leaderboard_scores)
 
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
