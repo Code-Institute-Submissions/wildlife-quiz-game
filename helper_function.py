@@ -19,7 +19,7 @@ def add_to_user_data_file(username,option):
     ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
         for i in data:
-            #if entry is found matching current username then add to animals or correctlyGuessed or passed list
+            #if entry is found matching current username then add to animals or correctlyGuessed or passed list depending on option parameter that is passed
             if(i['username'] == username):
                 random_animal = session['random_animal']
                 if (option == "animals"):
