@@ -10,23 +10,35 @@ class test_helper_function(unittest.TestCase):
         self.app = app.test_client()
     
     def test_get_random_animal(self):
-        # Test if session variable is set (not empty)
-        #tester = app.test_client()
-        #tester.post(
-        #    '/register',
-        #    data={
-        #    "username": "test"
-        #},
-        #    follow_redirects=True
-        #)
-        #tester.get('/game', follow_redirects=True)
-        #random_animal = session.get('random_animal')
-        #assert session.get("username") == "test"
-        #self.assertTrue(random_animal is not None)
+        #Test if session variable is set (not empty)
+        # with app.test_request_context():
+        #     tester = app.test_client()
+        #     tester.post(
+        #     '/register',
+        #     data={
+        #     "username": "test"
+        #     },
+        #     follow_redirects=True
+        #     )
+        #     tester.get('/game', follow_redirects=True)
+        #     random_animal = session.get('random_animal')
+        #     self.assertTrue(random_animal is not None)
 
-        # Test if function returns value in str format #
+        # Test if function returns anything at all #
         with app.test_request_context():
             self.assertIsNotNone(get_random_animal())
+
+    
+    def test_add_to_user_data_file(self):
+        # Test if entry in file is added to user_data file based on parameter passed
+        # Test if 
+        with app.test_request_context():
+            update_user_data_file('username')
+            with app.test_client() as client:
+                with client.session_transaction() as session:
+                    session['random_animal'] = 'animal'
+                self.assertEqual(add_to_user_data_file('username','animals'), True)
+
         
         
 
