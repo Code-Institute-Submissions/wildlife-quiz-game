@@ -2,6 +2,13 @@ import json
 import random
 from flask import Flask, session
 
+def open_user_data_json():
+    # Open the JSON file for reading
+    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: 
+        # Read the JSON into the buffer
+        data = json.load(jsonFile)
+        return data
+
 """function to get a random animal from the json file of animal data"""
 def get_random_animal():
     data = []
