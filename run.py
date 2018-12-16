@@ -15,7 +15,7 @@ def register():
       session['logged_in'] = True
       session['game_round'] = 0
       flash("Successfully registered as new user and logged in! :)")
-      helper_function.update_user_data_file(session['username'])
+      helper_function.add_new_user(session['username'])#update_user_data_file(
       return redirect(url_for('index'))
    return render_template("register.html")
 
@@ -49,7 +49,7 @@ def index():
     passes = []
     if 'username' in session:
       current_user_username = session['username']
-      helper_function.update_user_data_file(current_user_username)
+      helper_function.add_new_user(current_user_username) #update_user_data_file(
       correct_guesses = helper_function.get_current_user_game_history(current_user_username, "correctlyGuessed")
       print(correct_guesses)
       passes = helper_function.get_current_user_game_history(current_user_username, "passed")
@@ -94,7 +94,7 @@ def game():
         if guess == answer or guess+'s' == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
             point_earned = 1
-            helper_function.update_user_data_file(current_user_username, point_earned)
+            helper_function.update_user_score(current_user_username) #update_user_data_file(
             helper_function.add_to_user_data_file(current_user_username,"correctlyGuessed")
             print("updated scores file from game post")
             return redirect(url_for('game'))
