@@ -24,7 +24,7 @@ class test_helper_function(unittest.TestCase):
 
     
     def test_add_to_user_data_file(self):
-        ''' Test if entry in file is added to user_data file based on arguments passed'''
+        ''' Test if functions inserts entry in file is added to user_data file based on arguments passed'''
         with app.test_request_context():
             clear_user_data_json()
             add_new_user('test_username')
@@ -53,7 +53,46 @@ class test_helper_function(unittest.TestCase):
         update_user_score("test_username")
         self.assertEqual(open_user_data_json()[0]["score"], 1)
 
-        
+    def test_add_new_user(self):
+        '''Test if function adds new user to user_data.json file'''
+        clear_user_data_json()
+        add_new_user('test_username')
+        self.assertIn("test_username",open_user_data_json()[0]["username"])
+        self.assertEqual(open_user_data_json()[0]["score"], 0)
+                    
+
+    def test_get_current_user_score(self):
+        '''Test if function gets current user score from user_data.json file'''
+        clear_user_data_json()
+        mock_data_setup()
+        get_current_user_score('test_username')
+        self.assertEqual(open_user_data_json()[0]["score"], 0)
+    
+    def test_get_current_user_game_history(self):
+        '''Test if function gets current user game history (animals asked, correctly guessed, passed) from user_data.json file'''
+        clear_user_data_json()
+        mock_data_setup()
+        self.assertIn("test_animal", get_current_user_game_history('test_username', 'animals'))
+        self.assertIn("test_correctly_guessed", get_current_user_game_history('test_username', 'correctlyGuessed'))
+        self.assertIn("test_passed", get_current_user_game_history('test_username', 'passed'))
+
+    def test_username_already_exists(self):
+        '''Test if function checks if username already exists in user_data.json file'''
+        clear_user_data_json()
+        mock_data_setup()
+        self.assertTrue(username_already_exists("test_username"))
+        self.assertFalse(username_already_exists("other_username"))
+
+    def test_get_leaderboard(self):
+        '''Test if function returns different data than before it sorts the data'''
+        clear_user_data_json()
+        add_new_user('test_username_1')
+        add_new_user('test_username_2')
+        add_new_user('test_username_3')
+        update_user_score('test_username_2')
+        unsorted = open_user_data_json()
+        sorted = get_leaderboard()
+        self.assertNotEqual(sorted, unsorted)
         
 
 if __name__ == '__main__':
