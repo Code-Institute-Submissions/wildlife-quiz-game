@@ -128,4 +128,4 @@ def leaderboard():
 
     return render_template("leaderboard.html", leaderboard_scores=leaderboard_scores)
 
-#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
+app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
