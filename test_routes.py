@@ -119,24 +119,24 @@ class FlaskTestCase(unittest.TestCase):
         self.assertIn(b'Previous animal was passed, new animal has been loaded', response.data)
 
     # Ensure game route behaves correctly when you give a correct guess
-    """def test_m_game_correct_guess(self):
-        tester = app.test_client()
-        tester.post(
-            '/login',
-            data=dict(username="admin"),
-            follow_redirects=True
-        )
-        tester.get('/game', follow_redirects=True)
-        with app.test_client() as c:
-            with c.session_transaction() as sess:
-                sess['random_animal'] = "guess"
-        #with app.test_request_context():
-        response = tester.post(
-        '/game',
-        data=dict(guess="guess"),
-        follow_redirects=True
-        )
-        self.assertIn(b'Well done, that&#39;s the correct answer! Here&#39;s another one', response.data)"""
+    # def test_m_game_correct_guess(self):
+    #     tester = app.test_client()
+    #     tester.post(
+    #         '/login',
+    #         data=dict(username="admin"),
+    #         follow_redirects=True
+    #     )
+    #     tester.get('/game', follow_redirects=True)
+    #     with app.test_request_context():
+    #         with app.test_client() as c:
+    #             with c.session_transaction():
+    #                 session['random_animal'] = "guess"
+    #     response = tester.post(
+    #     '/game',
+    #     data=dict(guess="guess"),
+    #     follow_redirects=True
+    #     )
+    #     self.assertIn(b'Well done, that&#39;s the correct answer! Here&#39;s another one', response.data)
         
 
 if __name__ == '__main__':

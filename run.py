@@ -7,21 +7,23 @@ app.secret_key = 'some_secret'
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
-   if request.method == 'POST':
-      if helper_function.username_already_exists(request.form['username']):
-          flash(Markup('username: {} already exists, please enter a different value for username to register as a new user or login <a href="/login" class="alert-link">here</a>'.format(request.form["username"])))
-          return redirect(url_for('register')) 
-      session['username'] = request.form['username']
-      session['logged_in'] = True
-      session['game_round'] = 0
-      flash("Successfully registered as new user and logged in! :)")
-      helper_function.add_new_user(session['username'])#update_user_data_file(
-      return redirect(url_for('index'))
-   return render_template("register.html")
+    """register new user"""
+    if request.method == 'POST':
+        if helper_function.username_already_exists(request.form['username']):
+            flash(Markup('username: {} already exists, please enter a different value for username to register as a new user or login <a href="/login" class="alert-link">here</a>'.format(request.form["username"])))
+            return redirect(url_for('register')) 
+        session['username'] = request.form['username']
+        session['logged_in'] = True
+        session['game_round'] = 0
+        flash("Successfully registered as new user and logged in! :)")
+        helper_function.add_new_user(session['username'])
+        return redirect(url_for('index'))
+    return render_template("register.html")
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-   if request.method == 'POST':
+    """login existing user"""
+    if request.method == 'POST':
       if not helper_function.username_already_exists(request.form['username']):
           flash(Markup('username: {} does not exist yet, please register <a href="/register" class="alert-link">here</a>'.format(request.form["username"])))
           return redirect(url_for('login')) 
@@ -30,11 +32,11 @@ def login():
       session['game_round'] = 0
       flash("Successfully logged in as existing user! :)")
       return redirect(url_for('index'))
-   return render_template("login.html")
+    return render_template("login.html")
 
 @app.route('/logout')
 def logout():
-   # remove the username from the session if it is there
+   """remove the username from the session if it is there"""
    session.pop('username', None)
    session['logged_in'] = False
    flash("You were logged out")
@@ -43,20 +45,18 @@ def logout():
 
 @app.route('/', methods=["GET", "POST"])
 def index():
-    """Main page with instructions"""
+    """Index page with instructions, new Game button and Game history table"""
     current_user_username = ""
     correct_guesses = []
     passes = []
     if 'username' in session:
       current_user_username = session['username']
-      helper_function.add_new_user(current_user_username) #update_user_data_file(
+      helper_function.add_new_user(current_user_username) 
       correct_guesses = helper_function.get_current_user_game_history(current_user_username, "correctlyGuessed")
-      print(correct_guesses)
       passes = helper_function.get_current_user_game_history(current_user_username, "passed")
-      print(passes)
       # Handle POST request
       if request.method == "POST":
-          return redirect(url_for('game'))
+            return redirect(url_for('game'))
 
     return render_template("index.html", username=current_user_username, correct_guesses=correct_guesses, passes=passes)
 
@@ -64,15 +64,14 @@ def index():
 
 @app.route('/game', methods=["GET", "POST"])
 def game():
+    """Game function serves the riddles to be guessed and redirects or not as required depending on the user's input"""
     current_user_username = session['username']
 
             
     if request.method == "GET":
         random_animal = helper_function.get_random_animal()
-        print("random animal before:"+random_animal['title'])
         while helper_function.animal_already_asked(current_user_username,random_animal['title']):
             random_animal = helper_function.get_random_animal()
-            print("random animal after:"+random_animal['title'])
         score = helper_function.get_current_user_score(current_user_username)
         helper_function.add_to_user_data_file(current_user_username,"animals")
         session['previous_guesses'] = []
@@ -94,9 +93,8 @@ def game():
         if guess == answer or guess+'s' == answer:
             flash("Well done, that's the correct answer! Here's another one :)")
             point_earned = 1
-            helper_function.update_user_score(current_user_username) #update_user_data_file(
+            helper_function.update_user_score(current_user_username)
             helper_function.add_to_user_data_file(current_user_username,"correctlyGuessed")
-            print("updated scores file from game post")
             return redirect(url_for('game'))
         
         elif guess == "pass":
@@ -107,7 +105,6 @@ def game():
     
         else:
             session['incorrect_guesses'] += 1
-            print(session['incorrect_guesses'])
             if session['incorrect_guesses'] == 3:
                 flash("Max number of guesses reached, new animal has been loaded")
                 return redirect(url_for('game'))
@@ -122,7 +119,7 @@ def game():
 
 @app.route('/leaderboard', methods=["GET", "POST"])
 def leaderboard():
-    """Main page with instructions"""
+    """leaderboard with users and their scores"""
     leaderboard_scores = helper_function.get_leaderboard()
     session['game_round'] = 0
         # Handle POST request

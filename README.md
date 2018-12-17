@@ -3,12 +3,7 @@ This is a guessing game written in Python using the Flask web application micro 
 
 ## UX Design
 
-Details of the UX design is available in the 'PP project design' folder. This document outlines how I approached the design of this site.
-
-## Game Logic Design
-
-Details of the game logic design is available in the
-'Game Logic' folder. This document outlines how I approached the design of the Game Logic.
+Details of the UX design are available in the 'Documentation' folder in the 'Design' subfolder. This document outlines how I approached the design of this site.
 
 ## Features
 
@@ -26,10 +21,11 @@ This game will present an animal at random from the JSON file and the user must 
 8.  There is a leaderboard that ranks top scores for all users. This is presented at the end of the game after all 12 rounds are completed.
 
 ### Features Left to Implement
+- Allow user to play in easy mode (multiple choice option: choose between 3 answers (2 randomly generated incorrect and 1 correct)) or difficult mode (enter exact name mode)
 
 ## Demo
 
-A demo of this web application is available [here](https://wildlife-quiz-game..herokuapp.com/).
+A demo of this web application is available [here](https://wildlife-quiz-game.herokuapp.com/).
 
 
 ## Getting started /
@@ -44,6 +40,8 @@ A demo of this web application is available [here](https://wildlife-quiz-game..h
 **HTML, CSS, JavaScript (Front End Framework Bootstrap)  Python, Full Stack Micro Framework Flask :**
 
 ## Testing
+
+Automated Testing was undertaken to ensure that the development process followed was Test-driven development (TDD. The test suites are located in the test_routes.py and test_helper_functions.py files. All tests passed as per screenshots in the 'Documentation' folder in the 'Automated_Testing' subfolder.
 
 Manual testing was undertaken for this application and satisfactorily passed. A sample of the tests conducted are as follows:
 1.	Testing navigation buttons and hyperlinks throughout the page
@@ -62,8 +60,11 @@ Manual testing was undertaken for this application and satisfactorily passed. A 
 
 **Jordan Daly** - This project was completed as part of Code Institute’s Mentored Online Full Stack Web Development course in 2018.
 
-### Content
+### Content 
+- Text content was taken from the National Geographic website.
 
 ### Media
+- Media was taken from National Geographic website.
 
 ### Acknowledgements
+- Inspiration for this game came from [here](https://www.nationalgeographic.com/animals/index/).
