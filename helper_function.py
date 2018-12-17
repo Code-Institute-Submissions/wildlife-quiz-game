@@ -7,7 +7,8 @@ def mock_data_setup(username='test_username',score=0,animal='test_animal',correc
             try: 
                 data = json.load(jsonFile) # Read the JSON into the buffer
             except ValueError: 
-                data = [{"username": "username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
+                data = []
+                # data = [{"username": "username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
             
         ## Save our changes to JSON file
         with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
@@ -26,13 +27,17 @@ def open_user_data_json():
         return data
 
 def clear_user_data_json():
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
-        data = json.load(jsonFile) # Read the JSON into the buffer
+    # with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
+    #     data = json.load(jsonFile) # Read the JSON into the buffer
     
-    ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
-        data.clear()      
-        json.dump(data, jsonFile)
+        jsonFile.close()
+        
+    # raw = open("data/user_data.json", "r+")
+    # raw.read().split("\n")
+    # raw.seek(0)
+    # raw.truncate()
+    # raw.close
 
 def get_random_animal():
     """function to get a random animal from the json file of animal data"""
@@ -66,26 +71,22 @@ def add_to_user_data_file(username,option):
 
 def animal_already_asked(username,animal):
     """function to check if the randomly chosen animal has already been asked for the logged in user"""
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading 
-        data = json.load(jsonFile) # Read the JSON into the buffer
+    # with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading 
+    #     data = json.load(jsonFile) # Read the JSON into the buffer
+    data = open_user_data_json()
         
-        for i in data:
-            if(i['username'] == username):
-                ## check if animal already exists in animals list for this user in the user data file
-                if animal in i['animals']:
-                    return True
-                else:
-                    return False
+    for i in data:
+        if(i['username'] == username):
+            ## check if animal already exists in animals list for this user in the user data file
+            if animal in i['animals']:
+                return True
+            else:
+                return False
 
 
 def update_user_score(username):
     """function to update score if user exists and score is not zero"""
-    with open("data/user_data.json", "r", encoding='utf-8') as jsonFile: # Open the JSON file for reading
-        try: 
-            data = json.load(jsonFile) # Read the JSON into the buffer
-            print(data)
-        except ValueError: 
-            data = [{"username": "username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
+    data = open_user_data_json()
             
     ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:
@@ -104,7 +105,7 @@ def add_new_user(username):
             data = json.load(jsonFile) # Read the JSON into the buffer
             print(data)
         except ValueError: 
-            data = [{"username": "username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
+            data = [{"username": "test_username","score": 0, "animals":[], "correctlyGuessed":[], "passed":[]}]#set dummy data to avoid value error later on caused by empty json file
             
     ## Save our changes to JSON file
     with open("data/user_data.json", "w", encoding='utf-8') as jsonFile:

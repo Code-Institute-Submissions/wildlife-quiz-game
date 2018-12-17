@@ -26,14 +26,14 @@ class test_helper_function(unittest.TestCase):
     def test_add_to_user_data_file(self):
         ''' Test if entry in file is added to user_data file based on arguments passed'''
         with app.test_request_context():
-            add_new_user('username')
+            clear_user_data_json()
+            add_new_user('test_username')
             with app.test_client() as client:
                 with client.session_transaction():
                     session['random_animal'] = {"title": "test_animal_title"}
-                    #clear_user_data_json()
-                    add_to_user_data_file('username','animals')
-                    add_to_user_data_file('username','correctlyGuessed')
-                    add_to_user_data_file('username','passed')
+                    add_to_user_data_file('test_username','animals')
+                    add_to_user_data_file('test_username','correctlyGuessed')
+                    add_to_user_data_file('test_username','passed')
                     
                     self.assertIn("test_animal_title",open_user_data_json()[0]["animals"])
                     self.assertIn("test_animal_title",open_user_data_json()[0]["correctlyGuessed"])
@@ -47,7 +47,7 @@ class test_helper_function(unittest.TestCase):
         self.assertFalse(animal_already_asked("test_username","other_animal"))
 
     def test_update_user_score(self):
-        '''function to update score (increase by 1) if user exists'''
+        '''Test if function updates score (increase by 1) if user exists'''
         clear_user_data_json()
         mock_data_setup()
         update_user_score("test_username")
