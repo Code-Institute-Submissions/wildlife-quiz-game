@@ -3,7 +3,7 @@ This is a guessing game written in Python using the Flask web application micro 
 
 ## UX Design
 
-Details of the UX design are available in the 'Documentation' folder in the 'Design' subfolder. This document outlines how I approached the design of this site.
+Details of the UX design are available in the 'Documentation' folder in the 'Design' subfolder. This document outlines how I approached the UI design of this site.
 
 ## Features
 
@@ -17,11 +17,11 @@ This game will present an animal at random from the JSON file and the user must 
 5.  If a player guesses correctly, they are redirected to the next animal and they earn a point and their score is updated.
 5.	If a player chooses to Pass, they are redirected to the next animal and they do not earn a point and their score is not updated.
 6.	If a player guesses incorrectly, their incorrect guess is stored and printed below the riddle. The textarea is cleared so they can guess again. After 3 incorrect guesses the round is forfeited and they are redirected to the next animal and they do not earn a point and their score is not updated.
-7.  Multiple players can play an instance of the game at the same time, each in their own browser. User data is restricted to a browser session.
-8.  There is a leaderboard that ranks top scores for all users. This is presented at the end of the game after all 12 rounds are completed.
+7.  There is a leaderboard that ranks top scores for all users. This is presented at the end of the game after all 12 rounds are completed.
 
 ### Features Left to Implement
 - Allow user to play in easy mode (multiple choice option: choose between 3 answers (2 randomly generated incorrect and 1 correct)) or difficult mode (enter exact name mode)
+- Multiple players can play an instance of the game at the same time.
 
 ## Demo
 
@@ -50,8 +50,8 @@ Manual testing was undertaken for this application and satisfactorily passed. A 
 
 ## Deployment
 1. Make sure requirements.txt and Procfile exist
-⋅⋅* pip3 freeze --local requirements.txt
-⋅⋅* echo web: python app.py > Procfile
+`pip3 freeze --local requirements.txt`
+`echo web: python app.py > Procfile`
 2. Create Heroku App, Select Postgres add-on, download Heroku CLI toolbelt, login to heroku (Heroku login), git init, connect git to heroku (heroku git remote -a <project>), git add ., git commit, git push heroku master.
 3. heroku ps:scale web=1
 4. In heroku app settings set the config vars to add IP and PORT
